@@ -1,18 +1,6 @@
 import './pages/index.css';
-import { initialCards, onDeleteCard, createCard } from '/src/components/cards.js'
-import avatarImage from '/src/images/avatar.jpg';
-import monasteryImage from '/src/images/card_1.jpg';
-import sunsetImage from '/src/images/card_2.jpg';
-import mountainImage from '/src/images/card_3.jpg';
-import { openModal, closeModal } from '/src/components/modal.js'
-
-
-const cardImport = [
-  { name: 'Avatar', link: avatarImage },
-  { name: 'Monastery', link: monasteryImage },
-  { name: 'Sunset', link: sunsetImage },
-  { name: 'Mountain', link: mountainImage },
-];
+import { initialCards, onDeleteCard, createCard } from '/src/components/cards.js';
+import { openModal, closeModal, closeModalOverlay, closeModalEscape } from '/src/components/modal.js';
 
 // @todo: Темплейт карточки
 export const cardTemplate = document.querySelector('#card-template').content;
@@ -21,13 +9,13 @@ export const cardTemplate = document.querySelector('#card-template').content;
 const cardContainer = document.querySelector('.places__list');
 
 // @todo: Функция добавления карточки в DOM
-function addCard(cardElement){
+function addCard(cardElement) {
   cardContainer.append(cardElement);
 }
 
 // @todo: Вывести карточки на страницу
-initialCards.forEach(function (card){
-  const cardElement = createCard(card.name, card.link, onDeleteCard);
+initialCards.forEach(function (card) {
+  const cardElement = createCard(card.name, card.link, card.alt, onDeleteCard);
   addCard(cardElement);
 })
 
@@ -52,21 +40,18 @@ popups.forEach((popup) => {
   });
 });
 
-// Добавление обработчика на документ
-document.addEventListener('mousedown', (evt) => {
-  popups.forEach((popup) => {
-    if (popup.classList.contains('popup_is-opened') && !popup.contains(evt.target)) {
-      closeModal(popup);
-    }
-  });
-});
+// Закрытие модального окна кликом по оверлею
+document.addEventListener('mousedown', (evt) => closeModalOverlay(evt));
+
+//Закрытие модального окна по нажатию на клавишу Esc
+document.addEventListener('keydown', closeModalEscape);
 
 // Находим форму в DOM
-const formElement = profilePopup.querySelector('.popup__form');
+const profileEditForm = profilePopup.querySelector('.popup__form');
 
 // Находим поля формы в DOM
-const nameInput = formElement.querySelector('.popup__input_type_name');
-const jobInput = formElement.querySelector('.popup__input_type_description');
+const nameInput = profileEditForm.querySelector('.popup__input_type_name');
+const jobInput = profileEditForm.querySelector('.popup__input_type_description');
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 
@@ -78,7 +63,7 @@ function handleFormSubmit(evt) {
   evt.preventDefault();
 }
 
-formElement.addEventListener('submit', handleFormSubmit);
+profileEditForm.addEventListener('submit', handleFormSubmit);
 
 //Открытие модального окна
 const addOpenButton = document.querySelector('.profile__add-button');
@@ -97,18 +82,20 @@ formElementNewCard.addEventListener('submit', function(evt) {
   evt.preventDefault();
   const nameAddInput = formElementNewCard.elements['place-name'].value;
   const urlAddInput = formElementNewCard.elements['link'].value;
-  const newCard = createCard(nameAddInput, urlAddInput, onDeleteCard);
+  const altAddInput = nameAddInput;
+  const newCard = createCard(nameAddInput, urlAddInput, altAddInput, onDeleteCard, handleImageClick);
   cardContainer.prepend(newCard);
   formElementNewCard.reset();
   closeModal(addNewCardPopup, popups);
 })
 
-//Функция открытия картинки
-export function handleImageClick(link, name) {
-  const popupImage = document.querySelector('.popup_type_image');
-  const cardImage = document.querySelector('.popup__image');
+// //Функция открытия картинки
+export function handleImageClick(link, alt, name) {
+  const popupTypeImage = document.querySelector('.popup_type_image');
+  const popupImage = document.querySelector('.popup__image');
   const nameInput = document.querySelector('.popup__caption')
-  cardImage.src = link;
+  popupImage.src = link;
+  popupImage.alt = alt;
   nameInput.textContent = name;
-  openModal(popupImage);
+  openModal(popupTypeImage);
 }
