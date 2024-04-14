@@ -1,12 +1,12 @@
 import './pages/index.css';
-import { initialCards, onDeleteCard, createCard } from '/src/components/cards.js';
+import { initialCards, onDeleteCard, createCard, onLike, handleImageClick } from '/src/components/cards.js';
 import { openModal, closeModal, closeModalOverlay, closeModalEscape } from '/src/components/modal.js';
 
 // @todo: Темплейт карточки
 export const cardTemplate = document.querySelector('#card-template').content;
 
 // @todo: DOM узлы
-const cardContainer = document.querySelector('.places__list');
+export const cardContainer = document.querySelector('.places__list');
 
 // @todo: Функция добавления карточки в DOM
 function addCard(cardElement) {
@@ -15,7 +15,7 @@ function addCard(cardElement) {
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (card) {
-  const cardElement = createCard(card.name, card.link, card.alt, onDeleteCard);
+  const cardElement = createCard(card.name, card.link, card.alt, onDeleteCard, onLike, handleImageClick);
   addCard(cardElement);
 })
 
@@ -56,18 +56,18 @@ const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 
 // Обработчик «отправки» формы
-function handleFormSubmit(evt) {
+function handleFormProdileSubmit(evt) {
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
   closeModal(profilePopup, popups);
   evt.preventDefault();
 }
 
-profileEditForm.addEventListener('submit', handleFormSubmit);
+profileEditForm.addEventListener('submit', handleFormProdileSubmit);
 
 //Открытие модального окна
 const addOpenButton = document.querySelector('.profile__add-button');
-const addNewCardPopup = document.querySelector('.popup_type_new-card');
+export const addNewCardPopup = document.querySelector('.popup_type_new-card');
 
 function openAddPopup() {
   openModal(addNewCardPopup);
@@ -75,27 +75,6 @@ function openAddPopup() {
 
 addOpenButton.addEventListener('click', openAddPopup);
 
-//Создание новой карточки
-const formElementNewCard = document.forms['new-place'];
 
-formElementNewCard.addEventListener('submit', function(evt) {
-  evt.preventDefault();
-  const nameAddInput = formElementNewCard.elements['place-name'].value;
-  const urlAddInput = formElementNewCard.elements['link'].value;
-  const altAddInput = nameAddInput;
-  const newCard = createCard(nameAddInput, urlAddInput, altAddInput, onDeleteCard, handleImageClick);
-  cardContainer.prepend(newCard);
-  formElementNewCard.reset();
-  closeModal(addNewCardPopup, popups);
-})
 
-// //Функция открытия картинки
-export function handleImageClick(link, alt, name) {
-  const popupTypeImage = document.querySelector('.popup_type_image');
-  const popupImage = document.querySelector('.popup__image');
-  const nameInput = document.querySelector('.popup__caption')
-  popupImage.src = link;
-  popupImage.alt = alt;
-  nameInput.textContent = name;
-  openModal(popupTypeImage);
-}
+
