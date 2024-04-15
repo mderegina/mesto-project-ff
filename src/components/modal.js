@@ -1,5 +1,3 @@
-import { popups } from '/src/index.js';
-
 let isModalOpen = false;
 
 // Функция для открытия модального окна

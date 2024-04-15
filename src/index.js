@@ -1,5 +1,6 @@
 import './pages/index.css';
-import { initialCards, onDeleteCard, createCard, onLike, handleImageClick } from '/src/components/cards.js';
+import { initialCards } from '/src/components/cards.js';
+import { onDeleteCard, createCard, onLike } from '/src/components/card.js';
 import { openModal, closeModal, closeModalOverlay, closeModalEscape } from '/src/components/modal.js';
 
 // @todo: Темплейт карточки
@@ -75,6 +76,15 @@ function openAddPopup() {
 
 addOpenButton.addEventListener('click', openAddPopup);
 
-
+//Функция открытия картинки
+export function handleImageClick(link, alt, name) {
+  const popupTypeImage = document.querySelector('.popup_type_image');
+  const popupImage = document.querySelector('.popup__image');
+  const nameInput = document.querySelector('.popup__caption');
+  popupImage.src = link;
+  popupImage.alt = alt;
+  nameInput.textContent = name;
+  openModal(popupTypeImage);
+}
 
 
