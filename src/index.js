@@ -2,6 +2,7 @@ import './pages/index.css';
 import { initialCards } from '/src/components/cards.js';
 import { onDeleteCard, createCard, onLike } from '/src/components/card.js';
 import { openModal, closeModal, closeModalOverlay, closeModalEscape } from '/src/components/modal.js';
+import { enableValidation, clearValidation } from '/src/components/validation.js';
 
 // @todo: Темплейт карточки
 export const cardTemplate = document.querySelector('#card-template').content;
@@ -28,6 +29,7 @@ export const popups = document.querySelectorAll('.popup');
 function openEditPopup() {
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
+  clearValidation(profileEditForm, validationConfig);
   openModal(profilePopup);
 }
 
@@ -69,8 +71,11 @@ profileEditForm.addEventListener('submit', handleFormProdileSubmit);
 //Открытие модального окна
 const addOpenButton = document.querySelector('.profile__add-button');
 export const addNewCardPopup = document.querySelector('.popup_type_new-card');
+const newCardForm = addNewCardPopup.querySelector('.popup__form');
 
 function openAddPopup() {
+  newCardForm.reset();
+  clearValidation(newCardForm, validationConfig);
   openModal(addNewCardPopup);
 }
 
@@ -87,4 +92,15 @@ export function handleImageClick(link, alt, name) {
   openModal(popupTypeImage);
 }
 
+// Валидация
+export const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
+enableValidation(validationConfig);
 

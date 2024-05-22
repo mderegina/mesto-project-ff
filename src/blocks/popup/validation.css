@@ -1,0 +1,20 @@
+/* Неактивные кнопки отправки */
+.popup__button_disabled {
+  border: 1px solid #C4C4C4;
+  color: #C4C4C4;
+  cursor: not-allowed;
+  background-color: #FFFFFF;
+}
+
+/* Поля ввода */
+.popup__input_type_error {
+  border-color: #FF0000;
+}
+
+/* Сообщения об ошибке */
+.popup__error_visible {
+  color: #FF0000;
+  font-size: 12px;
+  margin-bottom: -30px 0;
+}
+
